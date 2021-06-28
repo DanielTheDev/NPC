@@ -3,10 +3,32 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.danielthedev</groupId>
     <artifactId>npc</artifactId>
     <version>1.0</version>
+    <packaging>jar</packaging>
+    <name>NPC</name>
+    <description>NPC util for minecraft craftbukkit</description>
+    <url>https://github.com/DanielTheDev/NPC</url>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>DanielTheDev</name>
+            <email>danielkoopmans.nl@gmail.com</email>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:git://github.com/DanielTheDev/NPC.git</connection>
+        <developerConnection>scm:git:ssh://github.com:DanielTheDev/NPC.git</developerConnection>
+        <url>http://github.com/DanielTheDev/NPC/tree/master</url>
+    </scm>
+
 
     <properties>
         <maven.compiler.source>16</maven.compiler.source>
