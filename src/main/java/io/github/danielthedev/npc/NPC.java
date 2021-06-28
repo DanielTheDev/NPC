@@ -1,4 +1,4 @@
-package com.danielthedev.npc;
+package io.github.danielthedev.npc;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
