@@ -1,4 +1,4 @@
-package io.github.danielthedev.npc;
+package com.danielthedev.npc;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -35,7 +35,6 @@ import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.v1_17_R1.util.CraftChatMessage;
 import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -53,6 +52,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
@@ -132,6 +132,7 @@ public class NPC {
         this.location.setPitch(location.getPitch());
         this.location.setYaw(location.getYaw());
         this.sendPacket(player, this.getEntityTeleportPacket(onGround));
+        this.rotateHead(player, location.getPitch(), location.getYaw());
     }
 
     public void updateMetadata(Collection<Player> players) {
@@ -1077,6 +1078,65 @@ public class NPC {
                 }
             }.runTaskAsynchronously(plugin);
         }
+
+        public static CompletableFuture<SkinTextures> getByUsername(String username) {
+            return CompletableFuture.supplyAsync(()->{
+                JSONArray array = new JSONArray();
+                array.add(username);
+                UUID result = null;
+                try {
+                    HttpRequest request = HttpRequest.newBuilder(new URI(UUID_URL))
+                            .setHeader("Content-Type", "application/json")
+                            .POST(HttpRequest.BodyPublishers.ofString(array.toString()))
+                            .timeout(Duration.ofSeconds(5))
+                            .build();
+
+                    HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+                    if (response.statusCode() == HttpURLConnection.HTTP_OK) {
+                        JSONArray uuidArray = (JSONArray) new JSONParser().parse(response.body());
+                        if (uuidArray.size() > 0) {
+                            String uuidStr = (String) ((JSONObject) uuidArray.get(0)).get("id");
+                            result = UUID.fromString(uuidStr.replaceAll("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5"));
+                        }
+                    }
+                } catch (URISyntaxException | InterruptedException | IOException | ParseException e) {
+                    e.printStackTrace();
+                }
+                if(result == null)
+                    throw new IllegalArgumentException("SkinTextures not found by username");
+                else {
+                    return getByUUID(result).join();
+                }
+            });
+        }
+
+        public static CompletableFuture<SkinTextures> getByUUID(UUID uuid) {
+            return CompletableFuture.supplyAsync(()->{
+                SkinTextures result = null;
+                try {
+                    HttpRequest request = HttpRequest.newBuilder(new URI(String.format(TEXTURE_URL, uuid.toString().replace("-", ""))))
+                            .timeout(Duration.ofSeconds(5))
+                            .GET().build();
+
+                    HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+                    if (response.statusCode() == HttpURLConnection.HTTP_OK) {
+                        JSONArray properties = (JSONArray) ((JSONObject) new JSONParser().parse(response.body())).get("properties");
+                        for (int t = 0; t < properties.size(); t++) {
+                            JSONObject obj = (JSONObject) properties.get(t);
+                            if (obj.containsKey("name") && obj.get("name").equals("textures")) {
+                                result = new SkinTextures((String) obj.get("value"), (String) obj.get("signature"));
+                            }
+                        }
+                    }
+                } catch (URISyntaxException | InterruptedException | IOException | ParseException e) {
+                    e.printStackTrace();
+                }
+                if(result==null)
+                    throw new IllegalArgumentException("SkinTextures not found by uuid");
+                else
+                    return result;
+            });
+        }
     }
 
     private void unsafe(UnsafeRunnable run) {
@@ -1109,5 +1169,6 @@ public class NPC {
     private interface UnsafeFunction<K, T> {
         T apply(K k) throws Exception;
     }
+
 
 }
