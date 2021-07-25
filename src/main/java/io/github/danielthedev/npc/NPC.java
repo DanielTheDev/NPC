@@ -192,6 +192,31 @@ public class NPC {
         this.sendPacket(player, this.getEntityAnimationPacket(animation));
     }
 
+    public void lookAtPlayer(Collection<Player> players, Player target) {
+        players.forEach(p->this.lookAtPlayer(p, target));
+    }
+
+    public void lookAtPlayer(Player player, Player target) {
+        this.lookAtPoint(player, target.getEyeLocation());
+    }
+
+    public void lookAtPoint(Collection<Player> players, Location location) {
+        players.forEach(p->this.lookAtPoint(p, location));
+    }
+
+    public void lookAtPoint(Player player, Location location) {
+        Location eyeLocation = this.getEyeLocation();
+        float yaw = (float) Math.toDegrees(Math.atan2(location.getZ() - eyeLocation.getZ(), location.getX()-eyeLocation.getX())) - 90;
+        yaw = (float) (yaw + Math.ceil( -yaw / 360 ) * 360);
+
+        float deltaXZ = (float) Math.sqrt(Math.pow(eyeLocation.getX()-location.getX(), 2) + Math.pow(eyeLocation.getZ()-location.getZ(), 2));
+        float pitch = (float) Math.toDegrees(Math.atan2(deltaXZ, location.getY()-eyeLocation.getY())) - 90;
+
+        pitch = (float) (pitch + Math.ceil( -pitch / 360 ) * 360);
+
+        this.rotateHead(player, pitch, yaw);
+    }
+
     public void rotateHead(Collection<Player> players, float pitch, float yaw) {
         players.forEach(p->this.rotateHead(p, pitch, yaw));
     }
@@ -342,6 +367,10 @@ public class NPC {
 
     public Location getLocation() {
         return location;
+    }
+
+    public Location getEyeLocation() {
+        return this.location.clone().add(0, EntityTypes.bi.m().b * 0.85F, 0);
     }
 
     public Ping getPing() {
@@ -646,7 +675,7 @@ public class NPC {
         public NBTTagCompound createParrot(Consumer<Parrot> callback, World world) {
             EntityParrot entityParrot = new EntityParrot(EntityTypes.al, ((CraftWorld)world).getHandle());
             CraftParrot parrot = new CraftParrot((CraftServer) Bukkit.getServer(), entityParrot);
-            callback.accept((Parrot) parrot);
+            callback.accept(parrot);
             NBTTagCompound nbtTagCompound = new NBTTagCompound();
             entityParrot.d(nbtTagCompound);
             return nbtTagCompound;
@@ -1170,6 +1199,4 @@ public class NPC {
     private interface UnsafeFunction<K, T> {
         T apply(K k) throws Exception;
     }
-
-
 }
