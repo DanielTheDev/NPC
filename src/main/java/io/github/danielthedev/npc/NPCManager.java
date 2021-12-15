@@ -16,7 +16,7 @@ public class NPCManager {
             case v1_16_R1 -> null;
             case v1_16_R2 -> null;
             case v1_16_R3 -> null;
-            case v1_17_R1 -> null;
+            case v1_17_R1 -> new io.github.danielthedev.npc.nms.v1_17_R1.CraftNPC(uuid, location, displayName);
             case v1_18_R1 -> new io.github.danielthedev.npc.nms.v1_18_R1.CraftNPC(uuid, location, displayName);
         };
     }

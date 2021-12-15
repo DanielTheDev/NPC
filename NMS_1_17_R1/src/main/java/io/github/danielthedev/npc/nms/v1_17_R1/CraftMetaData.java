@@ -1,4 +1,4 @@
-package io.github.danielthedev.npc.nms.v1_18_R1;
+package io.github.danielthedev.npc.nms.v1_17_R1;
 
 import io.github.danielthedev.npc.api.*;
 import io.github.danielthedev.npc.api.bukkit.CraftBukkitObject;
@@ -10,20 +10,11 @@ import net.minecraft.network.syncher.DataWatcherObject;
 import net.minecraft.network.syncher.DataWatcherRegistry;
 import net.minecraft.network.syncher.DataWatcherSerializer;
 import net.minecraft.world.entity.EntityPose;
-import net.minecraft.world.entity.EntityTypes;
-import net.minecraft.world.entity.animal.EntityParrot;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_18_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftParrot;
-import org.bukkit.entity.Parrot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 public class CraftMetaData implements MetaData<IChatBaseComponent,BlockPosition,NBTTagCompound> {
 

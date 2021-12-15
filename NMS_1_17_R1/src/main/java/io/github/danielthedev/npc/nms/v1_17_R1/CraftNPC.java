@@ -1,11 +1,13 @@
-package io.github.danielthedev.npc.nms.v1_18_R1;
+package io.github.danielthedev.npc.nms.v1_17_R1;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.datafixers.util.Pair;
 import io.github.danielthedev.npc.api.*;
+import io.github.danielthedev.npc.api.bukkit.CraftBukkitObject;
 import io.github.danielthedev.npc.api.bukkit.SkinTextures;
 import io.netty.buffer.Unpooled;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
@@ -13,15 +15,20 @@ import net.minecraft.network.syncher.DataWatcher;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EnumItemSlot;
+import net.minecraft.world.entity.animal.EntityParrot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.scores.Scoreboard;
 import net.minecraft.world.scores.ScoreboardTeam;
 import net.minecraft.world.scores.ScoreboardTeamBase;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_18_R1.util.CraftChatMessage;
+import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftParrot;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_17_R1.util.CraftChatMessage;
 import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -229,7 +236,7 @@ public class CraftNPC implements NPC {
     }
 
     private void sendPacket(Player player, Packet<?> packet) {
-        ((CraftPlayer)(player)).getHandle().b.a(packet);
+        ((CraftPlayer)(player)).getHandle().b.sendPacket(packet);
     }
 
     public void setNameTagVisibility(Collection<Player> players, boolean show) {
@@ -242,7 +249,7 @@ public class CraftNPC implements NPC {
             PacketPlayOutScoreboardTeam leavePacket = PacketPlayOutScoreboardTeam.a(team, this.profile.getName(), PacketPlayOutScoreboardTeam.a.b);
             this.sendPacket(player, leavePacket);
         } else {
-            team.a(ScoreboardTeamBase.EnumNameTagVisibility.b);
+            team.setNameTagVisibility(ScoreboardTeamBase.EnumNameTagVisibility.b);
             PacketPlayOutScoreboardTeam createPacket = PacketPlayOutScoreboardTeam.a(team, true);
             PacketPlayOutScoreboardTeam joinPacket = PacketPlayOutScoreboardTeam.a(team, this.profile.getName(), PacketPlayOutScoreboardTeam.a.a);
             this.sendPacket(player, createPacket);
@@ -250,12 +257,21 @@ public class CraftNPC implements NPC {
         }
     }
 
-    public void setParrotLeftShoulder(Consumer<Parrot> callback, World world) {
+    public NBTTagCompound createParrot(Consumer<Parrot> callback, World world) {
+        EntityParrot entityParrot = new EntityParrot(EntityTypes.al, ((CraftWorld)world).getHandle());
+        CraftParrot parrot = new CraftParrot((CraftServer) Bukkit.getServer(), entityParrot);
+        callback.accept(parrot);
+        NBTTagCompound nbtTagCompound = new NBTTagCompound();
+        entityParrot.d(nbtTagCompound);
+        return nbtTagCompound;
+    }
 
+    public void setParrotLeftShoulder(Consumer<Parrot> callback, World world) {
+        this.metadata.setLeftShoulder(CraftBukkitObject.from(this.createParrot(callback, world)));
     }
 
     public void setParrotRightShoulder(Consumer<Parrot> callback, World world) {
-
+        this.metadata.setRightShoulder(CraftBukkitObject.from(this.createParrot(callback, world)));
     }
 
     private PacketPlayOutMount getEntityAttachPacket(int[] entityIDs) {

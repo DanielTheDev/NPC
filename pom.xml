@@ -9,6 +9,7 @@
     <modules>
         <module>NMS_1_18_R1</module>
         <module>API</module>
+        <module>NMS_1_17_R1</module>
     </modules>
     <packaging>pom</packaging>
     <name>NPC</name>
@@ -42,6 +43,12 @@
         <dependency>
             <groupId>io.github.danielthedev</groupId>
             <artifactId>NMS_1_18_R1</artifactId>
+            <version>${revision}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.danielthedev</groupId>
+            <artifactId>NMS_1_17_R1</artifactId>
             <version>${revision}</version>
             <scope>provided</scope>
         </dependency>
