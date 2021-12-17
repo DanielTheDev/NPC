@@ -7,11 +7,13 @@ import io.github.danielthedev.npc.api.*;
 import io.github.danielthedev.npc.api.bukkit.CraftBukkitObject;
 import io.github.danielthedev.npc.api.bukkit.SkinTextures;
 import io.netty.buffer.Unpooled;
+import net.minecraft.EnumChatFormat;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.syncher.DataWatcher;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EnumItemSlot;
@@ -21,6 +23,7 @@ import net.minecraft.world.scores.Scoreboard;
 import net.minecraft.world.scores.ScoreboardTeam;
 import net.minecraft.world.scores.ScoreboardTeamBase;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_18_R1.CraftServer;
@@ -35,10 +38,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
@@ -215,6 +215,7 @@ public class CraftNPC implements NPC {
         this.sendPacket(player, this.getEntityHeadRotatePacket());
     }
 
+
     public void setTabListName(String name) {
         this.displayName = name;
     }
@@ -241,6 +242,24 @@ public class CraftNPC implements NPC {
 
     public void setNameTagVisibility(Collection<Player> players, boolean show) {
         players.forEach(p->this.setNameTagVisibility(p, show));
+    }
+
+    public void setGlow(Player player, GlowColor color, EntityState... entityStates) {
+        ScoreboardTeam team = new ScoreboardTeam(new Scoreboard(), this.hideTeam);
+        team.a(NMSConverter.convertToNMS(color));
+        PacketPlayOutScoreboardTeam createPacket = PacketPlayOutScoreboardTeam.a(team, true);
+        PacketPlayOutScoreboardTeam joinPacket = PacketPlayOutScoreboardTeam.a(team, this.profile.getName(), PacketPlayOutScoreboardTeam.a.a);
+        this.sendPacket(player, createPacket);
+        this.sendPacket(player, joinPacket);
+
+        List<EntityState> states = new ArrayList<>(Arrays.asList(entityStates));
+        if(color != GlowColor.NONE) {
+            states.add(EntityState.GLOWING);
+        } else {
+            states.remove(EntityState.GLOWING);
+        }
+        this.getMetaData().setEntityState(states.toArray(new EntityState[states.size()]));
+        this.updateMetadata(player);
     }
 
     public void setNameTagVisibility(Player player, boolean show) {

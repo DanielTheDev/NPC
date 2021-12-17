@@ -64,7 +64,7 @@ public interface MetaData<A,B,C> {
 
     void setFrozenTicks(Integer frozenTicks);
 
-    void setShaking();
+    void setShaking(boolean shaking);
 
     void setHandStatus(HandStatus handStatus);
 

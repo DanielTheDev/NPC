@@ -7,7 +7,7 @@
     <artifactId>npc</artifactId>
     <version>${revision}</version>
     <modules>
-        <module>Application</module>
+        <module>NPCFactory</module>
         <module>API</module>
         <module>NMS_1_18_R1</module>
         <module>NMS_1_17_R1</module>

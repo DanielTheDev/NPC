@@ -2,6 +2,8 @@ package io.github.danielthedev.npc.api;
 
 import com.mojang.authlib.GameProfile;
 import io.github.danielthedev.npc.api.bukkit.SkinTextures;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Parrot;
@@ -70,6 +72,8 @@ public interface NPC {
     void rotateHead(Collection<Player> receivers, float pitch, float yaw);
 
     void rotateHead(Player receiver, float pitch, float yaw);
+
+    void setGlow(Player receiver, GlowColor color, EntityState... states);
 
     void setTabListName(String name);
 

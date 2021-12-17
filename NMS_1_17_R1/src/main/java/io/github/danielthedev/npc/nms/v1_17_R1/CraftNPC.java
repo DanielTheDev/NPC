@@ -35,10 +35,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
@@ -213,6 +210,25 @@ public class CraftNPC implements NPC {
         this.location.setYaw(yaw);
         this.sendPacket(player, this.getEntityLookPacket());
         this.sendPacket(player, this.getEntityHeadRotatePacket());
+    }
+
+    public void setGlow(Player player, GlowColor color, EntityState... entityStates) {
+        ScoreboardTeam team = new ScoreboardTeam(new Scoreboard(), this.hideTeam);
+        team.setColor(NMSConverter.convertToNMS(color));
+        PacketPlayOutScoreboardTeam createPacket = PacketPlayOutScoreboardTeam.a(team, true);
+        PacketPlayOutScoreboardTeam joinPacket = PacketPlayOutScoreboardTeam.a(team, this.profile.getName(), PacketPlayOutScoreboardTeam.a.a);
+        this.sendPacket(player, createPacket);
+        this.sendPacket(player, joinPacket);
+
+        List<EntityState> states = new ArrayList<>(Arrays.asList(entityStates));
+        if(color != GlowColor.NONE) {
+            states.add(EntityState.GLOWING);
+        } else {
+            states.remove(EntityState.GLOWING);
+        }
+        this.getMetaData().setEntityState(states.toArray(new EntityState[states.size()]));
+        this.updateMetadata(player);
+
     }
 
     public void setTabListName(String name) {
@@ -396,6 +412,7 @@ public class CraftNPC implements NPC {
 
     @Override
     public NMSVersion getNMSVersion() {
+
         return NMSVersion.v1_17_R1;
     }
 

@@ -188,8 +188,8 @@ public class CraftMetaData implements MetaData<IChatBaseComponent,BlockPosition,
         this.frozenTicks.a(frozenTicks);
     }
 
-    public void setShaking() {
-        this.setFrozenTicks(140);
+    public void setShaking(boolean shaking) {
+        this.setFrozenTicks(shaking ? 140 : 0);
     }
 
     public void setHandStatus(HandStatus handStatus) {

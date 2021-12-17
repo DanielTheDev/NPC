@@ -1,9 +1,7 @@
 package io.github.danielthedev.npc.nms.v1_18_R1;
 
-import io.github.danielthedev.npc.api.Gamemode;
-import io.github.danielthedev.npc.api.ItemSlot;
-import io.github.danielthedev.npc.api.PlayerInfo;
-import io.github.danielthedev.npc.api.Pose;
+import io.github.danielthedev.npc.api.*;
+import net.minecraft.EnumChatFormat;
 import net.minecraft.network.protocol.game.PacketPlayOutPlayerInfo;
 import net.minecraft.world.entity.EntityPose;
 import net.minecraft.world.entity.EnumItemSlot;
@@ -12,6 +10,28 @@ import net.minecraft.world.level.EnumGamemode;
 import static io.github.danielthedev.npc.api.Pose.*;
 
 public class NMSConverter {
+
+    public static EnumChatFormat convertToNMS(GlowColor color) {
+        return switch (color) {
+            case BLACK -> EnumChatFormat.a;
+            case DARK_BLUE -> EnumChatFormat.b;
+            case DARK_GREEN -> EnumChatFormat.c;
+            case DARK_AQUA -> EnumChatFormat.d;
+            case DARK_RED -> EnumChatFormat.e;
+            case DARK_PURPLE -> EnumChatFormat.f;
+            case GOLD -> EnumChatFormat.g;
+            case GRAY -> EnumChatFormat.h;
+            case DARK_GRAY -> EnumChatFormat.i;
+            case BLUE -> EnumChatFormat.j;
+            case GREEN -> EnumChatFormat.k;
+            case AQUA -> EnumChatFormat.l;
+            case RED -> EnumChatFormat.m;
+            case LIGHT_PURPLE -> EnumChatFormat.n;
+            case YELLOW -> EnumChatFormat.o;
+            case WHITE -> EnumChatFormat.p;
+            case NONE -> EnumChatFormat.v;
+        };
+    }
 
     public static EnumGamemode convertToNMS(Gamemode gamemode) {
         return switch (gamemode) {
