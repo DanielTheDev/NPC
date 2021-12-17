@@ -426,19 +426,19 @@ public class CraftNPC implements NPC {
     }
 
     public void setASyncSkinByUsername(Plugin plugin, Collection<Player> players, String username) {
-        this.setASyncSkinByUsername(plugin, players, username, null);
+        this.setASyncSkinByUsername(plugin, players, username, (a,b)->{});
     }
 
     public void setASyncSkinByUsername(Plugin plugin, Player player, String username) {
-        this.setASyncSkinByUsername(plugin, player, username, null);
+        this.setASyncSkinByUsername(plugin, player, username, (a,b)->{});
     }
 
     public void setASyncSkinByUUID(Plugin plugin, Collection<Player> players, UUID uuid) {
-        this.setASyncSkinByUUID(plugin, players, uuid, null);
+        this.setASyncSkinByUUID(plugin, players, uuid, (a,b)->{});
     }
 
     public void setASyncSkinByUUID(Plugin plugin, Player player, UUID uuid) {
-        this.setASyncSkinByUUID(plugin, player, uuid, null);
+        this.setASyncSkinByUUID(plugin, player, uuid, (a,b)->{});
     }
 
     public void setASyncSkinByUsername(Plugin plugin, Player player, String username, BiConsumer<Boolean, NPC> callback) {
