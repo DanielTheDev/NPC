@@ -7,8 +7,9 @@
     <artifactId>npc</artifactId>
     <version>${revision}</version>
     <modules>
-        <module>NMS_1_18_R1</module>
+        <module>Application</module>
         <module>API</module>
+        <module>NMS_1_18_R1</module>
         <module>NMS_1_17_R1</module>
     </modules>
     <packaging>pom</packaging>
@@ -33,30 +34,4 @@
         <maven.compiler.target>17</maven.compiler.target>
         <revision>1.3</revision>
     </properties>
-    <dependencies>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.18-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.github.danielthedev</groupId>
-            <artifactId>NMS_1_18_R1</artifactId>
-            <version>${revision}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.github.danielthedev</groupId>
-            <artifactId>NMS_1_17_R1</artifactId>
-            <version>${revision}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.github.danielthedev</groupId>
-            <artifactId>API</artifactId>
-            <version>${revision}</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
 </project>

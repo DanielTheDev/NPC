@@ -394,6 +394,11 @@ public class CraftNPC implements NPC {
         return this.metadata;
     }
 
+    @Override
+    public NMSVersion getNMSVersion() {
+        return NMSVersion.v1_17_R1;
+    }
+
     public void setMetaData(MetaData metaData) {
         this.metadata = metaData;
     }

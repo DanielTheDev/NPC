@@ -93,21 +93,21 @@ public interface NPC {
 
     void setSkin(SkinTextures skinTextures);
 
-    void setASyncSkinByUsername(Plugin plugin, Collection<Player> players, String username);
+    void setASyncSkinByUsername(Plugin plugin, Collection<Player> receivers, String username);
 
-    void setASyncSkinByUsername(Plugin plugin, Player player, String username);
+    void setASyncSkinByUsername(Plugin plugin, Player receiver, String username);
 
-    void setASyncSkinByUUID(Plugin plugin, Collection<Player> players, UUID uuid);
+    void setASyncSkinByUUID(Plugin plugin, Collection<Player> receivers, UUID uuid);
 
-    void setASyncSkinByUUID(Plugin plugin, Player player, UUID uuid);
+    void setASyncSkinByUUID(Plugin plugin, Player receiver, UUID uuid);
 
-    void setASyncSkinByUsername(Plugin plugin, Player player, String username, BiConsumer<Boolean, NPC> callback);
+    void setASyncSkinByUsername(Plugin plugin, Player receiver, String username, BiConsumer<Boolean, NPC> callback);
 
-    void setASyncSkinByUsername(Plugin plugin, Collection<Player> players, String username, BiConsumer<Boolean, NPC> callback);
+    void setASyncSkinByUsername(Plugin plugin, Collection<Player> receivers, String username, BiConsumer<Boolean, NPC> callback);
 
-    void setASyncSkinByUUID(Plugin plugin, Player player, UUID uuid, BiConsumer<Boolean, NPC> callback);
+    void setASyncSkinByUUID(Plugin plugin, Player receiver, UUID uuid, BiConsumer<Boolean, NPC> callback);
     
-    void setASyncSkinByUUID(Plugin plugin, Collection<Player> players, UUID uuid, BiConsumer<Boolean, NPC> callback);
+    void setASyncSkinByUUID(Plugin plugin, Collection<Player> receivers, UUID uuid, BiConsumer<Boolean, NPC> callback);
 
     void setPing(Ping ping);
 
@@ -130,6 +130,6 @@ public interface NPC {
     String getDisplayName();
 
     MetaData getMetaData();
-    
-    
+
+    NMSVersion getNMSVersion();
 }

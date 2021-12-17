@@ -1,5 +1,6 @@
 package io.github.danielthedev.npc;
 
+import io.github.danielthedev.npc.api.NMSVersion;
 import io.github.danielthedev.npc.api.NPC;
 import org.bukkit.Location;
 

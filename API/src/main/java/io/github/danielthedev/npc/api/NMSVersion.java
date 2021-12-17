@@ -1,4 +1,4 @@
-package io.github.danielthedev.npc;
+package io.github.danielthedev.npc.api;
 
 import org.bukkit.Bukkit;
 
