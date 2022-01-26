@@ -132,8 +132,8 @@ public class NPC {
         this.location.setZ(location.getZ());
         this.location.setPitch(location.getPitch());
         this.location.setYaw(location.getYaw());
-        this.sendPacket(player, this.getEntityTeleportPacket(onGround));
         this.rotateHead(player, location.getPitch(), location.getYaw());
+        this.sendPacket(player, this.getEntityTeleportPacket(onGround));
     }
 
     public void updateMetadata(Collection<Player> players) {
